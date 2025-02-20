@@ -1,13 +1,13 @@
-# Getting Started
+# Magic3D Inference Instruction
 
 ## Requirements
 
-- Linux machine
+- Linux OS
 - Docker 
 - NVIDIA GPU with at least 32GB memory
 - Approximately 6~15 times disk space of input image and LiDAR data for intermediate result storage (wo/w depth map saved)
 
-# File Structure
+## File Structure
 
 Input ORBIS data should follow structure as below:
 
@@ -39,7 +39,7 @@ All the survey under `${DATA_PATH}` will be processed with a single inference. A
     |   |   |-- 85266_PANORAMA_POS_ORI.csv
     |   |   |-- JPG
     |   |   |-- coordinates.txt                         # Image meta for potree
-    |   |   |-- depth_map                               # Depth maps
+    |   |   |-- depth_map                               # Depth maps (Deletable) 
     |   |   `-- semantic_prediction                     # Image semantics inference
     |   |-- LASER
     |   |   |-- 85266_EMPRISE_BLOCS_LASER.dbf
@@ -57,7 +57,7 @@ All the survey under `${DATA_PATH}` will be processed with a single inference. A
     |-- inference.log                                   # log file 
     `-- mask.jpg
 ```
-_mask.jpg for current hardware configuration is enclosed in `resources/`._
+_**mask.jpg for current hardware configuration is enclosed in `resources/`.**_
 
 
 # LiDAR semantic 
@@ -87,7 +87,7 @@ DOCKER_BUILDKIT=0 docker build -t magic3d_jax .
 
 3. Mount the data folder path and run the container
 ```bash
-docker run -v ${DATA_PATH}:/mnt/ --gpus all --ipc=host  magic3d_jax
+docker run -v ${DATA_PATH}:/mnt/data/ --gpus all --ipc=host  magic3d_jax
 ```
 
 4. Optional: interactive inference
@@ -97,6 +97,9 @@ docker run -v ${DATA_PATH}:/mnt/ --gpus all --ipc=host  magic3d_jax
         ```
     - run inference script with customized behavior
         ```bash
+        # virtual env
+        conda activate magic
+
         # save depth maps
         python /home/root/magic3d/scripts/deploy_jax.py --save_depth
 
